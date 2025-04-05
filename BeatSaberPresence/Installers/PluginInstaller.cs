@@ -1,19 +1,20 @@
-﻿using Zenject;
-using SiraUtil;
-using IPA.Logging;
-using BeatSaberPresence.Config;
+﻿using BeatSaberPresence.Config;
+using Zenject;
 
-namespace BeatSaberPresence.Installers {
-    internal class PluginInstaller : Installer<PluginConfig, PluginInstaller> {
-        private readonly PluginConfig pluginConfig;
+namespace BeatSaberPresence.Installers;
 
-        internal PluginInstaller(PluginConfig pluginConfig) {
-            this.pluginConfig = pluginConfig;
-        }
+internal class PluginInstaller : Installer<PluginConfig, PluginInstaller>
+{
+    private readonly PluginConfig pluginConfig;
 
-        public override void InstallBindings() {
-            Container.BindInstance(pluginConfig);
-            Container.BindInterfacesAndSelfTo<PresenceController>().AsSingle();
-        }
+    internal PluginInstaller(PluginConfig pluginConfig)
+    {
+        this.pluginConfig = pluginConfig;
+    }
+
+    public override void InstallBindings()
+    {
+        Container.BindInstance(pluginConfig);
+        Container.BindInterfacesAndSelfTo<PresenceController>().AsSingle();
     }
 }

@@ -1,58 +1,70 @@
 ﻿using System;
-using Zenject;
+using BeatSaberPresence.Config;
 using Discord;
 using DiscordCore;
 using SiraUtil.Logging;
-using BeatSaberPresence.Config;
+using Zenject;
 
-namespace BeatSaberPresence {
-    internal class PresenceController : IInitializable, IDisposable {
-        private readonly SiraLog siraLog;
-        private readonly UserManager userManager;
-        private readonly PluginConfig pluginConfig;
-        private readonly DiscordInstance discordInstance;
-        internal const long clientID = 708741346403287113;
+namespace BeatSaberPresence;
 
-        private bool didInstantiateUserManagerProperly = true;
+internal class PresenceController : IInitializable, IDisposable
+{
+    internal const long clientID = 708741346403287113;
 
-        public Nullable<User> User { get; private set; } = null;
+    private readonly bool didInstantiateUserManagerProperly = true;
+    private readonly DiscordInstance discordInstance;
+    private readonly PluginConfig pluginConfig;
+    private readonly SiraLog siraLog;
+    private readonly UserManager userManager;
 
-        internal PresenceController(SiraLog siraLog, PluginConfig pluginConfig) {
-            this.siraLog = siraLog;
-            this.pluginConfig = pluginConfig;
-            this.discordInstance = DiscordManager.instance.CreateInstance(new DiscordSettings {
-                appId = clientID,
-                handleInvites = false,
-                modId = nameof(BeatSaberPresence),
-                modName = nameof(BeatSaberPresence),
-            });
-            this.userManager = DiscordClient.GetUserManager();
+    internal PresenceController(SiraLog siraLog, PluginConfig pluginConfig)
+    {
+        this.siraLog = siraLog;
+        this.pluginConfig = pluginConfig;
+        discordInstance = DiscordManager.instance.CreateInstance(new DiscordSettings
+        {
+            appId = clientID,
+            handleInvites = false,
+            modId = nameof(BeatSaberPresence),
+            modName = nameof(BeatSaberPresence)
+        });
+        userManager = DiscordClient.GetUserManager();
 
-            if (this.userManager == null) didInstantiateUserManagerProperly = false;
+        if (userManager == null) didInstantiateUserManagerProperly = false;
+    }
+
+    public User? User { get; private set; }
+
+    public void Dispose()
+    {
+        if (DiscordManager.IsSingletonAvailable && DiscordCore.UI.Settings.IsSingletonAvailable)
+        {
+            discordInstance.DestroyInstance();
         }
 
-        public void Initialize() {
-            siraLog.Debug("Initializing Presence Controller");
-            if (didInstantiateUserManagerProperly) userManager.OnCurrentUserUpdate += CurrentUserUpdated;
-        }
+        if (didInstantiateUserManagerProperly) userManager.OnCurrentUserUpdate -= CurrentUserUpdated;
+    }
 
-        private void CurrentUserUpdated() {
-            if (didInstantiateUserManagerProperly) User = userManager.GetCurrentUser();
-        }
+    public void Initialize()
+    {
+        siraLog.Debug("Initializing Presence Controller");
+        if (didInstantiateUserManagerProperly) userManager.OnCurrentUserUpdate += CurrentUserUpdated;
+    }
 
-        internal void SetActivity(Activity activity) {
-            discordInstance.ClearActivity();
-            if (!pluginConfig.Enabled) return;
-            discordInstance.UpdateActivity(activity);
-        }
+    private void CurrentUserUpdated()
+    {
+        if (didInstantiateUserManagerProperly) User = userManager.GetCurrentUser();
+    }
 
-        public void Dispose() {
-            if (DiscordManager.IsSingletonAvailable && DiscordCore.UI.Settings.IsSingletonAvailable) discordInstance.DestroyInstance();
-            if (didInstantiateUserManagerProperly) userManager.OnCurrentUserUpdate -= CurrentUserUpdated;
-        }
+    internal void SetActivity(Activity activity)
+    {
+        discordInstance.ClearActivity();
+        if (!pluginConfig.Enabled) return;
+        discordInstance.UpdateActivity(activity);
+    }
 
-        internal void ClearActivity() {
-            discordInstance.ClearActivity();
-        }
+    internal void ClearActivity()
+    {
+        discordInstance.ClearActivity();
     }
 }

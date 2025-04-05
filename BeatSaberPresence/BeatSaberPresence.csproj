@@ -1,16 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <LocalRefsDir Condition="Exists('..\Refs')">..\Refs</LocalRefsDir>
     <BeatSaberDir>$(LocalRefsDir)</BeatSaberDir>
   </PropertyGroup>
 
   <Import Project="BeatSaberPresence.csproj.user" Condition="Exists('BeatSaberPresence.csproj.user')"/>
-  
+
   <PropertyGroup>
     <ProjectGuid>{453B50C5-AD8E-4461-A2E0-6DDC3B0156FA}</ProjectGuid>
     <TargetFramework>net48</TargetFramework>
+    <LangVersion>10</LangVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BeatSaberPresence</RootNamespace>
@@ -20,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-<!--    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+    <!--    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
     <EnableFrameworkPathOverride>true</EnableFrameworkPathOverride>
     <FrameworkPathOverride>$(BeatSaberDir)\Beat Saber_Data\Managed</FrameworkPathOverride>
     <MarkPackageReferencesAsExternallyResolved>false</MarkPackageReferencesAsExternallyResolved>
