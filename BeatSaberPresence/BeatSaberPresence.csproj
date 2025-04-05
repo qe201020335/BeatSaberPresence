@@ -10,7 +10,7 @@
   
   <PropertyGroup>
     <ProjectGuid>{453B50C5-AD8E-4461-A2E0-6DDC3B0156FA}</ProjectGuid>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BeatSaberPresence</RootNamespace>
