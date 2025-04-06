@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BeatSaberPresence.Config;
 using Discord;
 using Zenject;
@@ -138,57 +139,50 @@ internal class MultiplayerPresenceManager : IInitializable, ILateDisposable
 
     private string Format(string rpcString)
     {
-        var formattedString = rpcString;
+        var result = rpcString;
 
         if (presenceController.User != null)
         {
-            formattedString = formattedString.Replace("{DiscordName}", presenceController.User.Value.Username);
+            result = result.Replace("{DiscordName}", presenceController.User.Value.Username);
         }
 
         if (presenceController.User != null)
         {
-            formattedString = formattedString.Replace("{DiscordDiscriminator}",
+            result = result.Replace("{DiscordDiscriminator}",
                 presenceController.User.Value.Discriminator);
         }
 
-        var diff = gameplayCoreSceneSetupData.difficultyBeatmap;
-        var gameplayModifiers = gameplayCoreSceneSetupData.gameplayModifiers;
-        var level = diff.level;
+        var beatmapKey = gameplayCoreSceneSetupData.beatmapKey;
+        var modifiers = gameplayCoreSceneSetupData.gameplayModifiers;
+        var level = gameplayCoreSceneSetupData.beatmapLevel;
+        var audioClip = gameplayCoreSceneSetupData.songAudioClip;
 
-        var totalTime = new TimeSpan(0, 0, (int)Math.Floor(level.beatmapLevelData.audioClip.length));
+        var totalTime = new TimeSpan(0, 0, (int)Math.Floor(audioClip.length));
 
-        formattedString = formattedString.Replace("{SongName}", level.songName);
-        formattedString = formattedString.Replace("{SongSubName}", level.songSubName);
-        formattedString = formattedString.Replace("{SongAuthorName}", level.songAuthorName);
-        formattedString = formattedString.Replace("{SongDuration}", totalTime.ToString(@"mm\:ss"));
-        formattedString = formattedString.Replace("{SongDurationSeconds}",
-            Math.Floor(level.beatmapLevelData.audioClip.length).ToString());
-        formattedString = formattedString.Replace("{LevelAuthorName}", level.levelAuthorName);
-        formattedString = formattedString.Replace("{Difficulty}", diff.difficulty.Name());
-        formattedString = formattedString.Replace("{SongBPM}", level.beatsPerMinute.ToString());
-        formattedString = formattedString.Replace("{LevelID}", level.levelID);
-        formattedString = formattedString.Replace("{EnvironmentName}", level.environmentInfo.environmentName);
-        formattedString = formattedString.Replace("{Submission}", "Disabled");
+        result = result.Replace("{SongName}", level.songName);
+        result = result.Replace("{SongSubName}", level.songSubName);
+        result = result.Replace("{SongAuthorName}", level.songAuthorName);
+        result = result.Replace("{SongDuration}", totalTime.ToString(@"mm\:ss"));
+        result = result.Replace("{SongDurationSeconds}", totalTime.ToString());
+        result = result.Replace("{LevelAuthorName}", level.allMappers.FirstOrDefault() ?? level.allLighters.FirstOrDefault() ?? "Unknown");
+        result = result.Replace("{Difficulty}", beatmapKey.difficulty.Name());
+        result = result.Replace("{SongBPM}", level.beatsPerMinute.ToString());
+        result = result.Replace("{LevelID}", level.levelID);
+        result = result.Replace("{EnvironmentName}", gameplayCoreSceneSetupData.targetEnvironmentInfo.environmentName);
+        result = result.Replace("{Submission}", "Disabled");
 
 
-        formattedString = formattedString.Replace("{NoFail}", gameplayModifiers.noFailOn0Energy ? "On" : "Off");
-        formattedString = formattedString.Replace("{NoBombs}", gameplayModifiers.noBombs ? "On" : "Off");
-        formattedString = formattedString.Replace("{NoObsticles}",
-            gameplayModifiers.enabledObstacleType == GameplayModifiers.EnabledObstacleType.NoObstacles
-                ? "On"
-                : "Off");
-        formattedString = formattedString.Replace("{NoArrows}", gameplayModifiers.noArrows ? "On" : "Off");
-        formattedString = formattedString.Replace("{SlowerSong}",
-            gameplayModifiers.songSpeed == GameplayModifiers.SongSpeed.Slower ? "On" : "Off");
-        formattedString = formattedString.Replace("{InstaFail}", gameplayModifiers.instaFail ? "On" : "Off");
-        formattedString = formattedString.Replace("{BatteryEnergy}",
-            gameplayModifiers.energyType == GameplayModifiers.EnergyType.Battery ? "On" : "Off");
-        formattedString = formattedString.Replace("{GhostNotes}", gameplayModifiers.ghostNotes ? "On" : "Off");
-        formattedString = formattedString.Replace("{DisappearingArrows}",
-            gameplayModifiers.disappearingArrows ? "On" : "Off");
-        formattedString = formattedString.Replace("{FasterSong}",
-            gameplayModifiers.songSpeed == GameplayModifiers.SongSpeed.Faster ? "On" : "Off");
+        result = result.Replace("{NoFail}", modifiers.noFailOn0Energy ? "On" : "Off");
+        result = result.Replace("{NoBombs}", modifiers.noBombs ? "On" : "Off");
+        result = result.Replace("{NoObsticles}", modifiers.enabledObstacleType == GameplayModifiers.EnabledObstacleType.NoObstacles ? "On" : "Off");
+        result = result.Replace("{NoArrows}", modifiers.noArrows ? "On" : "Off");
+        result = result.Replace("{SlowerSong}", modifiers.songSpeed == GameplayModifiers.SongSpeed.Slower ? "On" : "Off");
+        result = result.Replace("{InstaFail}", modifiers.instaFail ? "On" : "Off");
+        result = result.Replace("{BatteryEnergy}", modifiers.energyType == GameplayModifiers.EnergyType.Battery ? "On" : "Off");
+        result = result.Replace("{GhostNotes}", modifiers.ghostNotes ? "On" : "Off");
+        result = result.Replace("{DisappearingArrows}", modifiers.disappearingArrows ? "On" : "Off");
+        result = result.Replace("{FasterSong}", modifiers.songSpeed == GameplayModifiers.SongSpeed.Faster ? "On" : "Off");
 
-        return formattedString;
+        return result;
     }
 }

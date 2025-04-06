@@ -37,7 +37,7 @@ internal class PresenceController : IInitializable, IDisposable
 
     public void Dispose()
     {
-        if (DiscordManager.IsSingletonAvailable && DiscordCore.UI.Settings.IsSingletonAvailable)
+        if (DiscordManager.instance != null && DiscordCore.UI.Settings.instance != null)
         {
             discordInstance.DestroyInstance();
         }
