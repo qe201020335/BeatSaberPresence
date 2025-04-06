@@ -1,23 +1,36 @@
-<div align="center">
-    <br/>
-        <img src="https://fizzyapple12.com/files/github/BeatSaberPresence1.png" alt="BeatSaberPresence1">
-        <br/>
-        <img src="https://fizzyapple12.com/files/github/BeatSaberPresence2.png" alt="BeatSaberPresence2">
-    <br/>
-    <br/>
-    <h1>Beat Saber Presence</h1>
-    <br/>
-    <br/>
-    <br/>
-</div>
+# Beat Saber Presence
+A fully customizable mod for Beat Saber which gives you Rich Presence functionality in Beat Saber
 
-## What is this?
+## Requirements
+All available on [BeatMods](https://beatmods.com)
+* [BSIPA](https://github.com/nike4613/BeatSaber-IPA-Reloaded) 
+* [SiraUtil](https://github.com/Auros/SiraUtil)
+* [BeatSaberMarkupLanguage](https://github.com/monkeymanboy/BeatSaberMarkupLanguage)
+* [DiscordCore](https://github.com/DJDavid98/DiscordCore)
 
-Beat Saber Presence is a fully customizable mod for Beat Saber which gives you Rich Presence functionality in Beat Saber.
+## How to Install?
 
-<br/>
+You can either download a released version from the releases tab or build it yourself.
 
-## How can I customize it?
+Here are the steps to build the Project:
+
+1. Clone or download this repository
+2. Create or generate `BeatSaberPresence/BeatSaberPresence.csproj.user` like below with your Beat Saber game path
+3. Build the project
+4. The plugin will be automatically copied to Beat Saber
+
+Example of `BeatSaberPresence/BeatSaberPresence.csproj.user`:
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+   <PropertyGroup>
+      <!-- Change this path to your Beat Saber install path -->
+      <BeatSaberDir>U:/SteamLibrary/steamapps/common/Beat Saber</BeatSaberDir>
+   </PropertyGroup>
+</Project>
+``` 
+
+## How to Customize?
 
 Inside of the game, on the mods panel, there is a tab for BeatSaberPresence. Inside that menu, you can:
 
@@ -69,28 +82,3 @@ Snippet | Description | Replacement Example | Works In
 ``{GhostNotes}`` | Replaced with ``On`` or ``Off`` depending on the status of the "Ghost Notes" modifier | ``Off`` | Game
 ``{DisappearingArrows}`` | Replaced with ``On`` or ``Off`` depending on the status of the "Disappearing Arrows" modifier | ``Off`` | Game
 ``{FasterSong}`` | Replaced with ``On`` or ``Off`` depending on the status of the "Faster Song" modifier | ``Off`` | Game
-
-<br/>
-
-## What libraries or other plugins does it need?
-
-This plugin is built using BSIPA4 so you need that, as well as
- * [SiraUtil](https://github.com/Auros/SiraUtil)
- * [BeatSaberMarkupLanguage](https://github.com/monkeymanboy/BeatSaberMarkupLanguage)
- * [DiscordCore](https://github.com/FizzyApple12/DiscordCore)
-
-<br/>
-
-## Great! How do I get it?
-
-You can either download a released version from the releases tab or build it yourself.
-
-Here are the steps to build the Project:
-
-1. Link all of the DLLs from the Beat Saber directory
-
-2. Build the project
-
-3. Copy ``BeatSaberPresence.dll`` to the ``Plugins`` folder
-
-4. That's it! You're done!
